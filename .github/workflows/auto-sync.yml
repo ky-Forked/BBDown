@@ -1,0 +1,28 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ky-Forked/BBDown
+
+      - name: Setup Git
+        run: |
+          git config user.name "aks-ky"
+          git config user.email "122727212+aks-ky@users.noreply.github.com"
+
+      - name: Add Upstream
+        run: |
+          git remote add upstream https://github.com/nilaoda/BBDown.git
+          git fetch upstream
+          git merge upstream/main --allow-unrelated-histories
+          git push origin main
